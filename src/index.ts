@@ -1,10 +1,7 @@
-/*
- * multipage fallback
- * author: https://api.github.com/user/73281382 (rmhaiderali)
- */
+// multipage fallback
+// author: https://api.github.com/user/73281382 (rmhaiderali)
 
-import expressMiddleware from "./middlewares/express";
-import honoMiddleware from "./middlewares/hono";
-import vitePlugin from "./middlewares/vite";
-
-export { expressMiddleware, honoMiddleware, vitePlugin };
+export { findFilePath } from "./utilities/findFilePath"
+export * from "./middlewares/express"
+export * from "./middlewares/hono"
+export * from "./middlewares/vite"

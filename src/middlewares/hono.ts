@@ -1,19 +1,59 @@
-import fs from "fs";
-import path from "path";
-import { MiddlewareHandler as HonoMiddleware } from "hono";
-import findFilePath from "../utilities/findFilePath";
+import fs from "fs"
+import path from "path"
+import pc from "picocolors"
+import sendFile from "../utilities/hono/sendFile"
+import { findFilePath } from "../utilities/findFilePath"
+import type { MiddlewareHandler } from "hono"
 
-export default function ({
-  root = "/dist/",
+export type HonoMiddlewareOptions = {
+  root?: string
+  index?: string
+  nestingLimit?: number
+  strictTrailingSlash?: boolean
+  redirect?: boolean
+  redirectRegex?: RegExp
+  redirectRemoveFileName?: boolean
+}
+
+export function honoMiddleware({
+  root = "./dist/",
   index = "index.html",
-  nestingLimit = 5,
-} = {}): HonoMiddleware {
-  const absRoot = path.join(process.cwd(), root);
+  nestingLimit = 8,
+  strictTrailingSlash = false,
+  redirect = false,
+  redirectRegex = /(?:)/,
+  redirectRemoveFileName = true,
+}: HonoMiddlewareOptions = {}): MiddlewareHandler {
+  if (!path.isAbsolute(root)) root = path.join(process.cwd(), root)
+
+  if (!fs.existsSync(root) || !fs.lstatSync(root).isDirectory())
+    throw new Error(pc.red(root + " is not a directory"))
+
+  if (!(redirectRegex instanceof RegExp))
+    throw new Error(pc.red("redirectRegex must be a RegExp"))
+
+  const mustEndWith = strictTrailingSlash ? "/" : ""
 
   return async (c, next) => {
-    const filePath = findFilePath(c.req.path, absRoot, index, nestingLimit);
-    if (!filePath) return next();
+    const filePath = findFilePath(
+      c.req.path,
+      root,
+      index,
+      nestingLimit,
+      strictTrailingSlash
+    )
 
-    return c.html(fs.readFileSync(filePath, "utf-8"));
-  };
+    if (!filePath) return next()
+
+    if (redirect) {
+      const redirectPath = redirectRemoveFileName
+        ? path.dirname(filePath) + mustEndWith
+        : filePath
+
+      if (c.req.path !== redirectPath && c.req.path.match(redirectRegex))
+        return c.redirect(redirectPath, 301)
+    }
+
+    return sendFile(c, path.join(root, filePath))
+  }
 }

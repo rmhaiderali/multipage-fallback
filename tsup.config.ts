@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsup"
 
 export default defineConfig({
   format: ["cjs", "esm"],
@@ -7,4 +7,4 @@ export default defineConfig({
   shims: true,
   skipNodeModulesBundle: true,
   clean: true,
-});
+})
