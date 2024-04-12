@@ -47,7 +47,7 @@ export function honoMiddleware({
 
     if (redirect) {
       const redirectPath = redirectRemoveFileName
-        ? path.dirname(filePath) + mustEndWith
+        ? path.posix.join(path.dirname(filePath), mustEndWith)
         : filePath
 
       if (c.req.path !== redirectPath && c.req.path.match(redirectRegex))

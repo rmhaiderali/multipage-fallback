@@ -49,7 +49,7 @@ export function expressMiddleware({
 
     if (redirect) {
       const redirectPath = redirectRemoveFileName
-        ? path.dirname(filePath) + mustEndWith
+        ? path.posix.join(path.dirname(filePath), mustEndWith)
         : filePath
 
       if (req.path !== redirectPath && req.path.match(redirectRegex))

@@ -1,8 +1,9 @@
 import path from "path"
 import pc from "picocolors"
 import { findFilePath } from "../utilities/findFilePath"
-import type { IncomingMessage, ServerResponse } from "http"
 import type { Plugin, ViteDevServer, Connect } from "vite"
+import type { IncomingMessage } from "connect"
+import type { ServerResponse } from "http"
 
 export type VitePluginOptions = {
   index?: string
@@ -36,7 +37,7 @@ export function vitePlugin({
         res: ServerResponse,
         next: Connect.NextFunction
       ) {
-        const reqPath = req.url?.split("?")[0].split("#")[0] ?? "/"
+        const reqPath = req.originalUrl?.split("?")[0].split("#")[0] ?? "/"
         const filePath = findFilePath(
           reqPath,
           root,
@@ -49,7 +50,7 @@ export function vitePlugin({
 
         if (redirect) {
           const redirectPath = redirectRemoveFileName
-            ? path.dirname(filePath) + mustEndWith
+            ? path.posix.join(path.dirname(filePath), mustEndWith)
             : filePath
 
           if (reqPath !== redirectPath && reqPath.match(redirectRegex)) {
