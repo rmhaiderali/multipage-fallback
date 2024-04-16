@@ -7,10 +7,10 @@
 [![size](https://img.shields.io/bundlephobia/minzip/multipage-fallback?labelColor=24292E&color=0c53b0)](https://www.npmjs.org/package/multipage-fallback)
 [![license](https://img.shields.io/npm/l/multipage-fallback?labelColor=24292E&color=e0a804)](https://www.npmjs.org/package/multipage-fallback)
 
-- [How does it work?](#-how-does-it-work)
-- [Use with Express](#-use-with-express)
-- [Use with Hono](#-use-with-hono)
-- [Use with Vite](#-use-with-vite)
+- [How does it work?](#how-does-it-work)
+- [Use with Express](#use-with-express)
+- [Use with Hono](#use-with-hono)
+- [Use with Vite](#use-with-vite)
 
 ## Introduction <!-- omit in toc -->
 
