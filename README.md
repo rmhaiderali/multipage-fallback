@@ -1,4 +1,4 @@
-# 🪀 Multipage Fallback
+# Multipage Fallback
 
 > Fallback unhandled requests to the nearest specified index within your single or multi page applications
 
